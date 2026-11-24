@@ -1,0 +1,23 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email in ['owner@example.com']; // <- put your Gmail here
+    }
+
+    match /orders/{orderId} {
+      // customers see only their own orders; the owner sees all
+      allow read: if request.auth != null && (resource.data.uid == request.auth.uid || isAdmin());
+      // a customer can only create an order for themselves, in its starting state
+      allow create: if request.auth != null
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.status in ['Processing', 'Awaiting payment'];
+      // only the owner can change status
+      allow update: if isAdmin() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']);
+      allow delete: if false;
+    }
+  }
+}

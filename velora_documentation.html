@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>VELORA — التوثيق التقني الشامل ودليل المقابلات الهندسية (Engineering Interview Guide)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap');
+
+    :root {
+      --primary: #111111;
+      --gold: #b38e5d;
+      --gold-dark: #8c6a3b;
+      --gold-light: #f7f3ec;
+      --bg: #ffffff;
+      --card-bg: #fcfbf9;
+      --card-border: #e8e3dc;
+      --text-main: #1f2421;
+      --text-muted: #5c6460;
+      --text-light: #8a928e;
+      --code-bg: #1e1e24;
+      --code-fg: #f8f8f2;
+      --danger: #b91c1c;
+      --success: #15803d;
+      --warning: #b45309;
+      --info: #0369a1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      line-height: 1.8;
+      font-size: 14px;
+      direction: rtl;
+      text-align: right;
+    }
+
+    /* Print Page Rules */
+    @page {
+      size: A4;
+      margin: 18mm 15mm 20mm 15mm;
+      @bottom-center {
+        content: "VELORA Luxury E-Commerce — Technical Manual | Page " counter(page);
+        font-family: 'Cairo', sans-serif;
+        font-size: 9px;
+        color: #888;
+      }
+    }
+
+    @media print {
+      body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .page-break {
+        page-break-before: always;
+        break-before: page;
+      }
+      .avoid-break {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+    }
+
+    /* Typography */
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.35;
+      margin-bottom: 0.5em;
+    }
+
+    h1 {
+      font-size: 26px;
+      border-bottom: 2px solid var(--gold);
+      padding-bottom: 8px;
+      margin-top: 25px;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin-top: 22px;
+      color: var(--gold-dark);
+      border-right: 4px solid var(--gold);
+      padding-right: 10px;
+    }
+
+    h3 {
+      font-size: 16px;
+      margin-top: 18px;
+    }
+
+    p {
+      margin-bottom: 12px;
+      color: var(--text-main);
+    }
+
+    .en {
+      direction: ltr;
+      display: inline-block;
+      font-family: 'Fira Code', Consolas, monospace;
+      font-size: 0.9em;
+      color: #9c27b0;
+      font-weight: 600;
+      background: #f3e8ff;
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+
+    .path {
+      direction: ltr;
+      display: inline-block;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.88em;
+      color: #0369a1;
+      background: #e0f2fe;
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
+    /* Cover Page */
+    .cover {
+      height: 98vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);
+      color: #ffffff;
+      padding: 40px;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+      border: 3px solid var(--gold);
+    }
+
+    .cover::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at center, rgba(179, 142, 93, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cover-brand {
+      font-size: 54px;
+      letter-spacing: 12px;
+      font-weight: 900;
+      color: var(--gold);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .cover-tagline {
+      font-size: 18px;
+      letter-spacing: 4px;
+      color: #d1d5db;
+      margin-bottom: 35px;
+      font-weight: 300;
+      border-bottom: 1px solid rgba(179,142,93,0.4);
+      padding-bottom: 15px;
+      width: 70%;
+    }
+
+    .cover-title {
+      font-size: 28px;
+      color: #ffffff;
+      margin-bottom: 20px;
+      line-height: 1.4;
+      font-weight: 800;
+    }
+
+    .cover-subtitle {
+      font-size: 16px;
+      color: #9ca3af;
+      max-width: 650px;
+      line-height: 1.8;
+      margin-bottom: 45px;
+    }
+
+    .cover-meta {
+      display: flex;
+      gap: 30px;
+      background: rgba(255,255,255,0.06);
+      padding: 16px 30px;
+      border-radius: 8px;
+      border: 1px solid rgba(179,142,93,0.3);
+      font-size: 13px;
+    }
+
+    .cover-meta div {
+      text-align: center;
+    }
+
+    .cover-meta strong {
+      display: block;
+      color: var(--gold);
+      font-size: 15px;
+    }
+
+    /* Cards & Sections */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .badge-gold { background: var(--gold-light); color: var(--gold-dark); border: 1px solid var(--gold); }
+    .badge-primary { background: #f3f4f6; color: #1f2937; }
+    .badge-success { background: #dcfce7; color: #166534; }
+    .badge-danger { background: #fee2e2; color: #991b1b; }
+    .badge-info { background: #e0f2fe; color: #075985; }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 12.5px;
+    }
+
+    th, td {
+      border: 1px solid #e2e8f0;
+      padding: 10px 12px;
+      text-align: right;
+    }
+
+    th {
+      background: #f8fafc;
+      font-weight: 700;
+      color: var(--primary);
+      border-bottom: 2px solid var(--gold);
+    }
+
+    tr:nth-child(even) td {
+      background: #fafaf9;
+    }
+
+    /* Code Blocks */
+    pre {
+      background: var(--code-bg);
+      color: var(--code-fg);
+      padding: 14px;
+      border-radius: 6px;
+      font-family: 'Fira Code', Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      direction: ltr;
+      text-align: left;
+      overflow-x: auto;
+      margin: 14px 0;
+      border-left: 4px solid var(--gold);
+    }
+
+    code {
+      font-family: 'Fira Code', Consolas, monospace;
+    }
+
+    /* Grid & Layout */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 14px 0;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+      margin: 14px 0;
+    }
+
+    .box-callout {
+      border-right: 4px solid;
+      padding: 12px 16px;
+      border-radius: 0 6px 6px 0;
+      margin: 14px 0;
+      font-size: 13px;
+    }
+
+    .box-info { border-color: var(--info); background: #f0f9ff; color: #0c4a6e; }
+    .box-warning { border-color: var(--warning); background: #fffbeb; color: #78350f; }
+    .box-danger { border-color: var(--danger); background: #fef2f2; color: #7f1d1d; }
+    .box-success { border-color: var(--success); background: #f0fdf4; color: #14532d; }
+    .box-gold { border-color: var(--gold); background: var(--gold-light); color: var(--gold-dark); }
+
+    /* Ten Points Analysis Styling */
+    .ten-points {
+      list-style: none;
+      padding: 0;
+    }
+
+    .ten-points li {
+      margin-bottom: 10px;
+      padding-right: 24px;
+      position: relative;
+      font-size: 13px;
+    }
+
+    .ten-points li strong {
+      color: var(--gold-dark);
+      font-size: 13.5px;
+    }
+
+    .ten-points li::before {
+      content: "✦";
+      position: absolute;
+      right: 0;
+      color: var(--gold);
+      font-weight: bold;
+    }
+
+    /* Q&A Section */
+    .qa-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .qa-q {
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--primary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .qa-q::before {
+      content: "سؤال انترفيو";
+      font-size: 10px;
+      background: var(--gold);
+      color: #fff;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .qa-a {
+      font-size: 13.5px;
+      color: var(--text-main);
+      line-height: 1.75;
+    }
+
+    .qa-velora {
+      margin-top: 10px;
+      padding: 10px 14px;
+      background: #f8fafc;
+      border-right: 3px solid #64748b;
+      font-size: 12.5px;
+      color: #334155;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .toc {
+      background: #fafaf9;
+      border: 1px solid #e7e5e4;
+      border-radius: 8px;
+      padding: 24px;
+      margin: 30px 0;
+    }
+
+    .toc h2 {
+      border: none;
+      padding: 0;
+      color: var(--primary);
+      margin-bottom: 16px;
+    }
+
+    .toc-list {
+      columns: 2;
+      column-gap: 30px;
+      list-style: none;
+    }
+
+    .toc-list li {
+      margin-bottom: 10px;
+      font-size: 13.5px;
+      break-inside: avoid;
+    }
+
+    .toc-list a {
+      color: var(--text-main);
+      text-decoration: none;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dotted #ccc;
+      padding-bottom: 3px;
+    }
+
+    .toc-list a:hover {
+      color: var(--gold-dark);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== COVER PAGE ==================== -->
+  <div class="cover">
+    <div class="cover-brand">VELORA</div>
+    <div class="cover-tagline">LUXURY ATELIER & ARCHITECTURAL E-COMMERCE</div>
+    <div class="cover-title">
+      التوثيق التقني الشامل ودليل اجتياز المقابلة الهندسية<br>
+      <span style="font-size: 20px; font-weight: 400; color: var(--gold);">
+        Full Project Architecture, Source Code Breakdown & Software Engineering Interview Guide
+      </span>
+    </div>
+    <div class="cover-subtitle">
+      مرجع هندسي تفصيلي مكتوب بلغة عربية مبسطة وبلهجة مصرية واضحة للمبرمجين، مع الحفاظ على جميع المصطلحات التقنية بالإنجليزية كما تُنطق في كبرى شركات البرمجيات العالمية والمحلية.
+    </div>
+    <div class="cover-meta">
+      <div>
+        <strong>المنصة والمكتبة</strong>
+        React 19 + Vite + ESM
+      </div>
+      <div>
+        <strong>إدارة الحالة والبيانات</strong>
+        Context API + LocalStorage + IndexedDB + Firestore
+      </div>
+      <div>
+        <strong>التصميم والتنسيق</strong>
+        Pure Custom CSS + Responsive + Dark/Light Mode
+      </div>
+      <div>
+        <strong>التاريخ والإصدار</strong>
+        نوفمبر 2026 — v1.0.0 Production Edition
+      </div>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- ==================== TABLE OF CONTENTS ==================== -->
+  <div class="toc">
+    <h2>فهرس محتويات الدليل التقني (Table of Contents)</h2>
+    <ul class="toc-list">
+      <li><a href="#sec1"><span>1. النظرة المعمارية الشاملة ومخطط المشروع (Project Architecture)</span></a></li>
+      <li><a href="#sec2"><span>2. شرح شجرة الملفات والمجلدات وتكوين البناء (File System & Tooling)</span></a></li>
+      <li><a href="#sec3"><span>3. محركات إدارة الحالة وسياقات التطبيق (Context & State Management)</span></a></li>
+      <li><a href="#sec4"><span>4. التحليل العشاري للمكونات والصفحات (10-Point Component Deep Dive)</span></a></li>
+      <li><a href="#sec5"><span>5. الميزات الوظيفية لـ VELORA وتأثير التعديل والحذف (Core Features)</span></a></li>
+      <li><a href="#sec6"><span>6. معمارية الصور، الـ 4 زوايا، و IndexedDB (Image & Multi-View Engine)</span></a></li>
+      <li><a href="#sec7"><span>7. محرك المخزون المتعدد الأبعاد وإدارة الطلبات (Inventory & Orders Engine)</span></a></li>
+      <li><a href="#sec8"><span>8. بوابات الدفع والتكاملات المصرية (Payment Gateways & Local Commerce)</span></a></li>
+      <li><a href="#sec9"><span>9. أسئلة المقابلات الهندسية وأجوبتها النموذجية (Technical Interview Prep)</span></a></li>
+      <li><a href="#sec10"><span>10. شرح أكواد حقيقية سطراً بسطر وتجربة التعديلات (Line-by-Line Code Analysis)</span></a></li>
+      <li><a href="#sec11"><span>11. استكشاف الأخطاء وحلها والأداء المستقبلي (Troubleshooting & Roadmap)</span></a></li>
+    </ul>
+  </div>
+
+  <!-- ==================== SECTION 1: ARCHITECTURE ==================== -->
+  <div id="sec1">
+    <h1>1. النظرة المعمارية الشاملة للمشروع (Project Architecture & High-Level Overview)</h1>
+    <p>
+      مشروع <strong>VELORA</strong> هو واجهة متجر إلكتروني فاخر (<span class="en">Luxury E-commerce Storefront</span>) مبني بالكامل باستخدام مكتبة <span class="en">React</span> بالاعتماد على أدوات بناء حديثة وفائقة السرعة (<span class="en">Vite</span>). تم تصميم المشروع ليحاكي أرقى دور الأزياء العالمية (مثل Chanel و Dior و The Row) مع تكييفه ليناسب السوق المصري والعربي من حيث بوابات الدفع الفورية، سياسات المعاينة قبل الاستلام، وحساب المقاسات الدقيقة.
+    </p>
+
+    <div class="grid-3 avoid-break">
+      <div class="card">
+        <h3>طبقة العرض والواجهات (Presentation Layer)</h3>
+        <p>مكونات React وظيفية (<span class="en">Functional Components</span>) تستخدم Hooks بالكامل، خالية من كلاسات قديمة، وتعتمد على نظام CSS نقي بدون مكاتب ضخمة مثل Tailwind أو Bootstrap لضمان أعلى أداء وتحكم كامل في التباين والسمات الفاخرة.</p>
+        <span class="badge badge-gold">Pure CSS + Lucide Icons</span>
+      </div>
+      <div class="card">
+        <h3>طبقة إدارة الحالة (State & Logic Layer)</h3>
+        <p>تعتمد على <span class="en">React Context API</span> من خلال مزودين رئيسيين (<span class="path">StoreContext</span> و <span class="path">AuthContext</span>) مع تفويض التخزين الدائم لـ <span class="en">LocalStorage</span> و <span class="en">IndexedDB</span> مع جاهزية الربط السحابي بـ <span class="en">Firebase Firestore</span>.</p>
+        <span class="badge badge-info">Context + LocalStorage + IndexedDB</span>
+      </div>
+      <div class="card">
+        <h3>طبقة التجارة والخدمات (Commerce & Services)</h3>
+        <p>محرك مخزون متعدد الأبعاد يربط (القطعة + اللون + المقاس)، معالجة الطلبات وإصدار الفواتير، ونظام تتبع تفاعلي للشحنات عبر شركات الشحن المحلية (Aramex و Bosta)، مع دعم الدفع عبر InstaPay وفودافون كاش وميزة.</p>
+        <span class="badge badge-success">Egyptian Commerce Ready</span>
+      </div>
+    </div>
+
+    <div class="box-callout box-gold avoid-break">
+      <strong>فلسفة التصميم البرمجي (Architecture Philosophy):</strong><br>
+      المشروع مبني بمبدأ <em>Zero-Backend Dependency for Client Evaluation</em>؛ أي أن المتجر يعمل بكفاءة 100% بكامل وظائفه (السلة، المفضلة، إضافة وتعديل المنتجات، إتمام الطلبات، تتبع الشحنة، رفع الصور) حتى في غياب خادم خلفي، مع وجود معمارية جاهزة للاتصال بـ <span class="en">Firebase Auth & Firestore</span> بمجرد وضع مفاتيح الـ <span class="en">.env</span>.
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- ==================== SECTION 2: FILE SYSTEM ==================== -->
+  <div id="sec2">
+    <h1>2. تفصيل شجرة الملفات وتكوين البناء (File System & Configuration)</h1>
+    <p>
+      شجرة المشروع منظمة وفق المعايير القياسية لتطبيقات الـ Front-End الحديثة:
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>المسار / الملف</th>
+          <th>النوع</th>
+          <th>الدور والمسؤولية التقنية</th>
+          <th>التبعيات المرتبطة</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="path">package.json</span></td>
+          <td>Configuration</td>
+          <td>تعريف التبعيات، برمجيات الحزمة، سكريبتات التشغيل (<span class="en">dev, build, preview</span>)، وتحديد نوع الحزمة <span class="en">"type": "module"</span>.</td>
+          <td>Node.js / npm</td>
+        </tr>
+        <tr>
+          <td><span class="path">vite.config.js</span></td>
+          <td>Build Config</td>
+          <td>إعداد حزمة Vite وربط ملحق <span class="en">@vitejs/plugin-react</span> لتمكين Fast Refresh أثناء التطوير وتحسين مخرجات الـ bundle.</td>
+          <td>Vite, Plugin-React</td>
+        </tr>
+        <tr>
+          <td><span class="path">index.html</span></td>
+          <td>Entry HTML</td>
+          <td>الصفحة الحاضنة التي تحتوي على وسم <span class="en">&lt;div id="root"&gt;&lt;/div&gt;</span> وتستدعي سكريبت الدخول <span class="path">/src/main.jsx</span>.</td>
+          <td>main.jsx</td>
+        </tr>
+        <tr>
+          <td><span class="path">firestore.rules</span></td>
+          <td>Security Rules</td>
+          <td>قواعد الحماية لقاعدة بيانات Firebase Firestore: تتحقق من هوية المشرف (<span class="en">isAdmin</span>)، وتمنح العملاء حق قراءة وإنشاء طلباتهم الخاصة فقط.</td>
+          <td>Firebase Firestore</td>
+        </tr>
+        <tr>
+          <td><span class="path">src/main.jsx</span></td>
+          <td>React Entry Point</td>
+          <td>نقطة الدخول الرئيسية لـ React؛ تستخدم <span class="en">createRoot</span> لربط شجرة المكونات بالـ DOM داخل متصفح المستخدم.</td>
+          <td>App.jsx, index.html</td>
+        </tr>
+        <tr>
+          <td><span class="path">src/App.jsx</span></td>
+          <td>Root Component & Router</td>
+          <td>تعريف هيكل التطبيق العام، ربط الـ Context Providers، خريطة التوجيه (<span class="en">Routes</span>)، ومكونات الـ Layout الدائمة (Header, Footer, Toast).</td>
+          <td>React Router, Contexts, Pages</td>
+        </tr>
+        <tr>
+          <td><span class="path">src/firebase.js</span></td>
+          <td>Backend Integration</td>
+          <td>تهيئة خدمات Firebase (Auth, Firestore, Google Provider) وقراءة المتغيرات البيئية من <span class="en">import.meta.env</span> مع توفير fallback في حالة عدم ضبطها.</td>
+          <td>Firebase SDK</td>
+        </tr>
+        <tr>
+          <td><span class="path">src/styles.css</span></td>
+          <td>Global Design System</td>
+          <td>المتغيرات العامة للألوان والخطوط، نظام الوضع المظلم والنهاري (<span class="en">data-theme</span>)، تنسيق الأزرار وحقول الإدخال وبطاقات المنتجات.</td>
+          <td>All Components</td>
+        </tr>
+        <tr>
+          <td><span class="path">src/gallery.css</span></td>
+          <td>Gallery Styles</td>
+          <td>تنسيقات معرض الصور المتطور، عدسة التكبير بالماوس (<span class="en">Magnifier Lens</span>)، وشاشة العرض الكاملة (<span class="en">Lightbox Modal</span>).</td>
+          <td>ProductGallery.jsx</td>
+        </tr>
+        <tr>
+          <td><span class="path">src/dashboards.css</span></td>
+          <td>Executive UI Styles</td>
+          <td>تنسيقات لوحة تحكم المشرف (Admin Dashboard)، الجداول، بطاقات المؤشرات المالية، وتبويبات إدارة المخزون والفئات.</td>
+          <td>Admin.jsx, Account.jsx</td>
+        </tr>
+        <tr>
+          <td><span class="path">src/header-responsive.css</span></td>
+          <td>Responsive Header</td>
+          <td>تنسيقات الميجا منيو الفاخرة (Mega Menu)، القائمة الجانبية في الموبايل (<span class="en">Drawer</span>)، وشريط البحث التفاعلي.</td>
+          <td>Header.jsx</td>
+        </tr>
+        <tr>
+          <td><span class="path">src/features.css</span></td>
+          <td>E-Commerce Features</td>
+          <td>تنسيقات حاسبة المقاسات الذكية (FitFinder)، بادجات المخزون، ونوافذ إضافة العناوين وبوابات الدفع.</td>
+          <td>FitFinder, Checkout, Account</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- ==================== SECTION 3: CONTEXT & STATE ==================== -->
+  <div id="sec3">
+    <h1>3. محركات إدارة الحالة وسياقات التطبيق (Context & State Management Architecture)</h1>
+    <p>
+      في مشاريع الـ Front-End الكبيرة، يتم التمييز بين <strong>الحالة المحلية (Local State)</strong> الخاصة بمكون واحد و<strong>الحالة العامة (Global State)</strong> التي تشترك فيها عدة صفحات. اعتمدت VELORA على المعمارية التالية:
+    </p>
+
+    <div class="card avoid-break">
+      <div class="card-header">
+        <h3>أولاً: StoreContext — عصب المتجر الإلكتروني (<span class="path">src/context/StoreContext.jsx</span>)</h3>
+        <span class="badge badge-gold">Primary State Hub</span>
+      </div>
+      <p>
+        يمثل هذا الـ Context المحرك المركزي للمشروع، ويحتوي على الحالات والوظائف الآتية:
+      </p>
+      <ul style="padding-right: 20px; line-height: 1.8;">
+        <li><strong>كتالوج المنتجات (<span class="en">products</span>):</strong> يتم تحميله مبدئياً من مصفوفة <span class="path">src/data/products.js</span>، ويُحفظ تلقائياً في <span class="en">localStorage</span> بمفتاح <span class="en">'velora-products-v2'</span> لضمان استمرار التعديلات وعمليات الحذف والإضافة التي يقوم بها المشرف.</li>
+        <li><strong>سلة المشتريات (<span class="en">cart</span>):</strong> لا تعتمد فقط على الـ <span class="en">product.id</span>، بل تُولد مفتاحاً فريداً لكل سطر عبر دالة:
+          <br><code class="en">lineKey = (id, size, color) =&gt; `${id}|${size || ''}|${color || ''}`</code><br>
+          مما يسمح للمستخدم بطلب نفس القطعة بمقاسات وألوان مختلفة دون أن تطغى واحدة على الأخرى.
+        </li>
+        <li><strong>قائمة الأمنيات (<span class="en">wishlist</span>):</strong> مصفوفة من أرقام المنتجات المحفوظة محلياً، مع دالة <span class="en">toggleWish</span> لإضافة أو إزالة القطعة بنقرة واحدة.</li>
+        <li><strong>العملة النشطة (<span class="en">currency</span>):</strong> دعم التبديل بين الجنيه المصري (<span class="en">EGP</span>) والدولار (<span class="en">USD</span>) مع دالة التنسيق <span class="en">fmt(usd)</span> التي تطبق سعر الصرف وتضيف الرمز المناسب.</li>
+        <li><strong>المظهر (<span class="en">dark</span>):</strong> التحكم في الوضع المظلم والنهاري عبر تعديل السمة <span class="en">document.documentElement.dataset.theme</span> وحفظ التفضيل.</li>
+        <li><strong>إدارة المخزون الحقيقي (<span class="en">Inventory Management</span>):</strong> توفير دوال مثل <span class="en">setSizeStock</span> و <span class="en">adjustSizeStock</span> و <span class="en">deductOrderStock</span> لخصم الكميات فور إتمام أي طلب.</li>
+        <li><strong>إدارة الطلبات (<span class="en">Orders Management</span>):</strong> دمج الطلبات المسجلة في السحابة مع الطلبات المحلية وتحديث حالات الشحن لحظياً.</li>
+        <li><strong>محرك الخصومات (<span class="en">Promotions Engine</span>):</strong> التحقق من كود الكوبون، نوع الخصم (نسبة مئوية أو رقم ثابت)، وتطبيقه على الإجمالي.</li>
+      </ul>
+    </div>
+
+    <div class="card avoid-break">
+      <div class="card-header">
+        <h3>ثانياً: AuthContext — محرك المصادقة وإدارة المستخدمين (<span class="path">src/context/AuthContext.jsx</span>)</h3>
+        <span class="badge badge-info">Authentication Hub</span>
+      </div>
+      <p>
+        يتعامل مع طبقة الهوية الرقمية عبر <span class="en">Firebase Authentication</span>:
+      </p>
+      <ul style="padding-right: 20px; line-height: 1.8;">
+        <li>يوفر دوال: <span class="en">signup</span> (إنشاء حساب مع تحديث الـ <span class="en">displayName</span>)، <span class="en">login</span> (تسجيل الدخول بالبريد وكلمة السر)، <span class="en">loginWithGoogle</span> (عبر النافذة المنبثقة)، <span class="en">logout</span>، و <span class="en">resetPassword</span>.</li>
+        <li>يحتوي على دالة ذكية <span class="en">friendlyError(error)</span> تترجم أكواد أخطاء فايربيس التقنية (مثل <span class="en">auth/invalid-credential</span>) إلى رسائل مفهومة للمستخدم العربي.</li>
+        <li><strong>Demo Profile Fallback:</strong> في حال عدم توفر مفاتيح Firebase، لا يتعطل التطبيق! بل يتيح نظام محاكاة (<span class="en">Demo Session</span>) لتجربة كامل خصائص حساب المستخدم وحفظ الطلبات.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- ==================== SECTION 4: 10-POINT COMPONENT ANALYSIS ==================== -->
+  <div id="sec4">
+    <h1>4. التحليل العشاري لكل مكون وصفحة في المشروع (The 10-Point Deep Dive)</h1>
+    <p>
+      إليك فحص دقيق لكل ملف ومكون في المشروع وفق الأسئلة العشرة المعيارية للمقابلات الهندسية:
+    </p>
+
+    <!-- Component 1: Header -->
+    <div class="card avoid-break">
+      <div class="card-header">
+        <h3>1. مكون الترويسة والتنقل: Header.jsx</h3>
+        <span class="badge badge-gold">Navigation & Mega Menu</span>
+      </div>
+      <ul class="ten-points">
+        <li><strong>1. ما هو اسمه؟</strong> <span class="en">Header</span></li>
+        <li><strong>2. أين موقعه؟</strong> <span class="path">src/components/Header.jsx</span></li>
+        <li><strong>3. ماذا يفعل؟</strong> يعرض شريط الإعلانات العلوي، الشعار الفاخر، روابط الأقسام، الميجا منيو (<span class="en">Mega Menu</span>) التفاعلي عند المرور بالماوس، شريط البحث السريع، زر تبديل العملة (EGP / USD)، زر تبديل الثيم المظلم، عداد السلة وقائمة الأمنيات، وزر الوصول للحساب واللوحة الإدارية.</li>
+        <li><strong>4. لماذا تم إنشاؤه؟</strong> ليكون عنصر التنقل الثابت والبديهي في كل صفحات التطبيق، ويعكس تجربة تسوق دور الأزياء الراقية عبر تصنيفات واضحة وسريعة.</li>
+        <li><strong>5. كيف يعمل داخلياً؟</strong> يستخدم <span class="en">useStore</span> لجلب عدد عناصر السلة وحالة الثيم والعملة، ويستخدم <span class="en">useAuth</span> لمعرفة ما إذا كان المستخدم مسجلاً، ويستخدم مصفوفات <span class="en">MEGA_MENU_GROUPS</span> لتوليد أعمدة التصنيفات، مع مؤقت (<span class="en">timeoutRef</span>) لمنع انغلاق القائمة فور خروج الماوس بالخطأ.</li>
+        <li><strong>6. ما المكونات التي تعتمد عليه؟</strong> يتم استدعاؤه مباشرة في <span class="path">src/App.jsx</span> أعلى الـ <span class="en">&lt;Routes&gt;</span>.</li>
+        <li><strong>7. ماذا يحدث لو تم حذفه؟</strong> يفقد المتجر شريط التنقل بالكامل؛ لن يستطيع المستخدم فتح السلة، البحث عن المنتجات، الانتقال بين أقسام الرجال والنساء، أو تبديل العملة إلا بكتابة الروابط يدوياً في المتصفح!</li>
+        <li><strong>8. ماذا يحدث لو تم تعديله؟</strong> أي إضافة لقسم جديد هنا تنعكس فوراً في شريط الترويسة عبر الموقع بأكمله.</li>
+        <li><strong>9. ماذا يحدث لو أضفنا هيدر آخر؟</strong> سيحدث تكرار بصري كارثي وازدواجية في عدادات السلة وشريط البحث.</li>
+        <li><strong>10. ما المشاكل الشائعة عند تنفيذه خطأ؟</strong> عدم إلغاء المؤقت <span class="en">clearTimeout</span> يؤدي إلى وميض (<span class="en">flickering</span>) في الميجا منيو، أو حدوث <span class="en">memory leak</span> إذا لم يتم تنظيف أحداث الاستماع للنقر الخارجي (<span class="en">click outside listener</span>) في الـ <span class="en">useEffect</span>.</li>
+      </ul>
+    </div>
+
+    <!-- Component 2: ProductCard -->
+    <div class="card avoid-break">
+      <div class="card-header">
+        <h3>2. مكون كارت المنتج: ProductCard.jsx</h3>
+        <span class="badge badge-primary">Reusable UI</span>
+      </div>
+      <ul class="ten-points">
+        <li><strong>1. ما هو اسمه؟</strong> <span class="en">ProductCard</span> (ويُصدر معه <span class="en">ProductGrid</span> و <span class="en">SectionHeading</span>)</li>
+        <li><strong>2. أين موقعه؟</strong> <span class="path">src/components/ProductCard.jsx</span></li>
+        <li><strong>3. ماذا يفعل؟</strong> يعرض بطاقة القطعة الفردية في شبكات العرض: الصورة الأساسية، الصورة البديلة عند مرور الماوس (<span class="en">Hover Preview</span> للظهر أو الجنب)، بادج التخفيض أو المخزون (<span class="en">Out of Stock, Low Stock</span>)، السعر المنسق، زر القلب لحفظ القطعة، وزر الإضافة السريعة (<span class="en">Quick Add</span>).</li>
+        <li><strong>4. لماذا تم إنشاؤه؟</strong> لتحقيق مبدأ إعادة استخدام الكود (<span class="en">DRY - Don't Repeat Yourself</span>) في الصفحة الرئيسية، صفحات الأقسام، وصفحة المفضلة.</li>
+        <li><strong>5. كيف يعمل داخلياً؟</strong> يستدعي دالة <span class="en">resolveProductViews(p)</span> لتحديد الصورة الأساسية وصورة الظهر للـ Hover، ويحسب إجمالي المخزون عبر <span class="en">getProductTotalStock</span>، وإذا كانت القطعة تتطلب مقاساً ينقل المستخدم لصفحة التفاصيل، أما إذا كانت بدون مقاسات فيضيفها للسلة فوراً.</li>
+        <li><strong>6. ما المكونات التي تعتمد عليه؟</strong> <span class="path">Home.jsx</span>, <span class="path">Listing.jsx</span>, <span class="path">Wishlist.jsx</span>, <span class="path">ProductDetail.jsx</span>.</li>
+        <li><strong>7. ماذا يحدث لو تم حذفه؟</strong> تنهار كل صفحات عرض المنتجات ولن يتمكن التطبيق من تصيير أي كتالوج.</li>
+        <li><strong>8. ماذا يحدث لو تم تعديله؟</strong> التعديل عليه (مثل تغيير شكل البادج أو حركة الصورة) ينعكس بشكل موحد على مئات المنتجات المعروضة في كل الموقع بلمسة واحدة.</li>
+        <li><strong>9. ماذا يحدث لو أضفنا كارت آخر مكرر؟</strong> تشتيت لمعايير التصميم وصعوبة في صيانة ميزات الكتالوج.</li>
+        <li><strong>10. ما المشاكل الشائعة عند تنفيذه خطأ؟</strong> نسيان خاصية <span class="en">loading="lazy"</span> يسبب بطء شديد في تحميل الصفحات ذات المنتجات الكثيرة، أو عدم معالجة الصور المكسورة عبر حدث <span class="en">onError</span> مما يترك مربعات رمادية قبيحة.</li>
+      </ul>
+    </div>
+
+    <!-- Component 3: ProductGallery -->
+    <div class="card avoid-break">
+      <div class="card-header">
+        <h3>3. مكون استوديو الصور التفاعلي: ProductGallery.jsx</h3>
+        <span class="badge badge-gold">Photographic Studio & Zoom</span>
+      </div>
+      <ul class="ten-points">
+        <li><strong>1. ما هو اسمه؟</strong> <span class="en">ProductGallery</span></li>
+        <li><strong>2. أين موقعه؟</strong> <span class="path">src/components/ProductGallery.jsx</span></li>
+        <li><strong>3. ماذا يفعل؟</strong> يعرض زوايا التصوير الأربعة للمنتج (الوش، الضهر، الجنب، التفاصيل وخامة القماش) مع شريط مصغرات جانبي، عدسة تكبير تفاعلية تتحرك مع الماوس لتفحص الخيوط والأزرار، وشاشة تكبير كاملة (<span class="en">Lightbox</span>) مع سحب وتحريك وزر للتحكم بالأسهم في الكيبورد.</li>
+        <li><strong>4. لماذا تم إنشاؤه؟</strong> لأن العميل في قطاع الأزياء الفاخرة لا يشتري القطعة دون معاينة دقيقة لتفصيل الظهر ونوع السحاب والقماش من مختلف الجوانب.</li>
+        <li><strong>5. كيف يعمل داخلياً؟</strong> يقوم بعمل <span class="en">Image Preloading</span> مسبق للزوايا الأربعة لضمان الانتقال اللحظي بدون وميض، ويحسب إحداثيات مؤشر الماوس بالنسبة المئوية <span class="en">(clientX - rect.left) / width</span> لتحريك نقطة ارتكاز الـ Zoom (<span class="en">transform-origin</span>).</li>
+        <li><strong>6. ما المكونات التي تعتمد عليه؟</strong> صفحة تفاصيل المنتج <span class="path">src/pages/ProductDetail.jsx</span>.</li>
+        <li><strong>7. ماذا يحدث لو تم حذفه؟</strong> تصبح صفحة المنتج بلا أي صور تفاعلية، ويفقد المتجر أهم ميزة تسويقية في المنتجات الفاخرة.</li>
+        <li><strong>8. ماذا يحدث لو تم تعديله؟</strong> يمكنك التحكم في سرعة التكبير، أبعاد العدسة، أو ألوان إطار الصور.</li>
+        <li><strong>9. ماذا يحدث لو أضفنا معرضاً موازياً؟</strong> ثقل غير مبرر في تحميل الصور واستهلاك ذاكرة المتصفح.</li>
+        <li><strong>10. ما المشاكل الشائعة عند تنفيذه خطأ؟</strong> عدم إزالة مستمع أحداث الكيبورد (<span class="en">removeEventListener('keydown')</span>) عند إغلاق الـ Lightbox، مما يسبب تسريب ذاكرة أو تنقل الصور حتى أثناء الكتابة في حقول النصوص!</li>
+      </ul>
+    </div>
+
+    <!-- Component 4: FitFinder -->
+    <div class="card avoid-break">
+      <div class="card-header">
+        <h3>4. مكون خبير المقاسات الذكي: FitFinder.jsx</h3>
+        <span class="badge badge-success">Smart Sizing AI</span>
+      </div>
+      <ul class="ten-points">
+        <li><strong>1. ما هو اسمه؟</strong> <span class="en">FitFinder</span></li>
+        <li><strong>2. أين موقعه؟</strong> <span class="path">src/components/FitFinder.jsx</span></li>
+        <li><strong>3. ماذا يفعل؟</strong> حاسبة مقاسات ذكية تسأل العميل عن الطول والوزن وتفضيل القصة (مجسم Fitted، مظبوط Regular، مريح Relaxed) في الملابس، أو طول القدم بالسنتيمتر في الأحذية، وتقترح المقاس الدقيق مع زر لاختياره مباشرة.</li>
+        <li><strong>4. لماذا تم إنشاؤه؟</strong> لتقليل نسبة المرتجعات (<span class="en">Return Rate</span>) التي تعتبر أكبر معضلة في المتاجر الإلكترونية، ومساعدة المشتري على الثقة في مقاس القطعة.</li>
+        <li><strong>5. كيف يعمل داخلياً؟</strong> يستدعي دوال خوارزميات القياس من <span class="path">src/utils/sizing.js</span>، ويعتمد على معادلات مؤشر كتلة الجسم ونسب الطول إلى الوزن لتقدير المقاس الأمثل.</li>
+        <li><strong>6. ما المكونات التي تعتمد عليه؟</strong> <span class="path">ProductDetail.jsx</span>.</li>
+        <li><strong>7. ماذا يحدث لو تم حذفه؟</strong> يضطر العميل لتخمين مقاسه وقد يتردد في الشراء أو يشتري مقاساً خاطئاً.</li>
+        <li><strong>8. ماذا يحدث لو تم تعديله؟</strong> يمكن إضافة مقاسات الأطفال أو قياسات محيط الصدر والخصر.</li>
+        <li><strong>9. ما المشاكل الشائعة عند تنفيذه خطأ؟</strong> إرجاع قيم <span class="en">NaN</span> إذا قام المستخدم بإدخال نصوص في حقول الأرقام دون تحقق <span class="en">validation</span>.</li>
+      </ul>
+    </div>
+
+    <!-- Component 5: ProductModal -->
+    <div class="card avoid-break">
+      <div class="card-header">
+        <h3>5. نافذة إدارة وإنشاء المنتجات: ProductModal.jsx</h3>
+        <span class="badge badge-danger">Admin CRUD Operations</span>
+      </div>
+      <ul class="ten-points">
+        <li><strong>1. ما هو اسمه؟</strong> <span class="en">ProductModal</span></li>
+        <li><strong>2. أين موقعه؟</strong> <span class="path">src/components/ProductModal.jsx</span></li>
+        <li><strong>3. ماذا يفعل؟</strong> نافذة منبثقة للمشرف لإضافة قطعة جديدة أو تعديل قطعة موجودة: تحديد الاسم، القسم، السعر الأصلي وسعر التخفيض، بادج القطعة، الوصف، إضافة ألوان متعددة برمز الـ Hex، رفع 4 صور لكل لون محلياً من الجهاز عبر FileReader، وضبط كمية المخزون لكل مقاس ولون.</li>
+        <li><strong>4. لماذا تم إنشاؤه؟</strong> لتمكين إدارة المتجر من التحكم الكامل في محتوى الكتالوج دون الحاجة لتعديل الكود المصدري.</li>
+        <li><strong>5. كيف يعمل داخلياً؟</strong> يستخدم <span class="en">FileReader.readAsDataURL</span> لتحويل الصور المرفوعة من الجهاز إلى نصوص <span class="en">base64</span> لعرضها وتخزينها، ويجمع مصفوفة الألوان والمقاسات والمخزون في كائن مهيكل يُمرر لدالة <span class="en">onSave</span>.</li>
+        <li><strong>6. ما المكونات التي تعتمد عليه؟</strong> صفحة الإدارة <span class="path">src/pages/Admin.jsx</span>.</li>
+        <li><strong>7. ماذا يحدث لو تم حذفه؟</strong> يفقد المشرف القدرة على إضافة أو تعديل المنتجات بصرياً من لوحة التحكم.</li>
+        <li><strong>8. ما المشاكل الشائعة عند تنفيذه خطأ؟</strong> رفع صور ذات أحجام ضخمة جداً (أكثر من 5 ميجابايت) بصيغة base64 قد يملأ سعة <span class="en">LocalStorage</span> بسرعة ويؤدي إلى خطأ <span class="en">QuotaExceededError</span>، ولذلك تم توفير <span class="path">src/utils/indexedDB.js</span> كحل بديل عملاق.</li>
+      </ul>
+    </div>
+
+    <!-- Component 6: Toast -->
+    <div class="card avoid-break">
+      <div class="card-header">
+        <h3>6. مكون الإشعارات المنبثقة: Toast.jsx</h3>
+        <span class="badge badge-info">Feedback UI</span>
+      </div>
+      <ul class="ten-points">
+        <li><strong>1. ما هو اسمه؟</strong> <span class="en">Toast</span></li>
+        <li><strong>2. أين موقعه؟</strong> <span class="path">src/components/Toast.jsx</span></li>
+        <li><strong>3. ماذا يفعل؟</strong> إشعار خفيف يظهر أسفل الشاشة عند إضافة منتج للسلة، أو حفظه للمفضلة، أو تطبيق كود خصم، ويختفي تلقائياً بعد 2.5 ثانية.</li>
+        <li><strong>4. لماذا تم إنشاؤه؟</strong> لتوفير تغذية راجعة فورية (<span class="en">Instant User Feedback</span>) بدون مقاطعة تجربة التصفح بنوافذ alert مزعجة.</li>
+        <li><strong>5. كيف يعمل داخلياً؟</strong> يشترك في حالة <span class="en">toast</span> من <span class="en">StoreContext</span>، ويقوم الـ Context بضبط مؤقت <span class="en">setTimeout</span> لمسح الرسالة تلقائياً مع تنظيف المؤقت (<span class="en">cleanup function</span>).</li>
+        <li><strong>6. ما المكونات التي تعتمد عليه؟</strong> يستقر في <span class="path">App.jsx</span> ليغطي كامل التطبيق.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- ==================== SECTION 5: FEATURES & CRUD ==================== -->
+  <div id="sec5">
+    <h1>5. استعراض ميزات المتجر وتأثير الإضافة والحذف والتعديل (VELORA Feature Breakdown)</h1>
+    <p>
+      كل ميزة في VELORA تم بناؤها بدقة لخدمة تجربة المستخدم. إليك تفصيل كل ميزة وسلوكها عند التعديل:
+    </p>
+
+    <div class="card avoid-break">
+      <h3>1. لوحة تحكم المشرف التنفيذية (Admin Executive Dashboard — 10 Tabs)</h3>
+      <p>
+        تقع في <span class="path">src/pages/Admin.jsx</span> ولا تكتفي فقط بإدارة المنتجات، بل تقدم نظام إدارة موارد متكامل (<span class="en">Mini-ERP</span>) مقسم إلى 10 تبويبات:
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>التبويب (Tab)</th>
+            <th>الوظيفة والمسؤولية التقنية</th>
+            <th>ماذا يحدث لو تم حذفه أو تعطيله؟</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="en">Overview</span></td>
+            <td>مؤشرات الإيرادات الإجمالية، متوسط قيمة السلة، تنبيهات نواقص المخزون، وأحدث الطلبات.</td>
+            <td>يفقد صاحب المتجر النظرة المالية السريعة للنشاط التجاري.</td>
+          </tr>
+          <tr>
+            <td><span class="en">Products</span></td>
+            <td>جدول المنتجات، فلترة وبحث وتصنيف، أزرار التعديل والحذف وإضافة قطعة جديدة عبر المودال.</td>
+            <td>يتعطل الـ CRUD الأساسي للمنتجات في المتجر.</td>
+          </tr>
+          <tr>
+            <td><span class="en">Categories</span></td>
+            <td>شجرة الأقسام والفئات، إضافة تصنيف فرعي، حذف تصنيف، أو إعادة ضبط الشجرة الافتراضية.</td>
+            <td>لا يمكن توسيع تصنيفات المتجر ديناميكياً ويقتصر على الثابت في الكود.</td>
+          </tr>
+          <tr>
+            <td><span class="en">Departments</span></td>
+            <td>إدارة الأقسام الكبرى (Women, Men, Kids) والأقسام المخصصة وتفعيل ظهورها في الميجا منيو.</td>
+            <td>تفقد إدارة المتجر القدرة على إطلاق خطوط إنتاج جديدة (مثل العطور أو الديكور).</td>
+          </tr>
+          <tr>
+            <td><span class="en">Inventory</span></td>
+            <td>مصفوفة المخزون الفيزيائي باللون والمقاس، أزرار الزيادة والنقصان اللحظية، وتصنيف حالة المخزون.</td>
+            <td>يصعب متابعة القطع التي أوشكت على النفاد مما قد يسبب بيع قطع غير متوفرة.</td>
+          </tr>
+          <tr>
+            <td><span class="en">Orders</span></td>
+            <td>إدارة الطلبات الحالية، تغيير حالة الشحن (Awaiting, Processing, Shipped, Delivered)، وطباعة الفاتورة الفاخرة.</td>
+            <td>يتعطل تدفق معالجة شحنات العملاء وفوترتها.</td>
+          </tr>
+          <tr>
+            <td><span class="en">Customers</span></td>
+            <td>دليل عملاء الأتيليه، إجمالي طلبات كل عميل، إجمالي إنفاقه، وبيانات التواصل.</td>
+            <td>غياب رؤية بيانات كبار العملاء (VIP Clients) لإرسال العروض الحصرية.</td>
+          </tr>
+          <tr>
+            <td><span class="en">Promotions</span></td>
+            <td>محرك الكوبونات؛ إضافة كود خصم، تحديد نسبته أو قيمته والحد الأدنى للإنفاق، وتفعيله/تعطيله.</td>
+            <td>فقدان القدرة على تشغيل الحملات التسويقية ومواسم التخفيضات.</td>
+          </tr>
+          <tr>
+            <td><span class="en">Images</span></td>
+            <td>مستودع إدارة الصور المخزنة في IndexedDB والسحابة ومعاينة جودتها وأحجامها.</td>
+            <td>صعوبة فحص مصادر الصور وحذف الصور القديمة المستهلكة للذاكرة.</td>
+          </tr>
+          <tr>
+            <td><span class="en">Settings</span></td>
+            <td>إعدادات المتجر العامة، تعيين إيميلات المشرفين المعتمدين في Firebase، وإعادة ضبط بيانات العرض التجريبي.</td>
+            <td>فقدان وسيلة استعادة حالة المصنع للمتجر التجريبي عند الرغبة.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card avoid-break">
+      <h3>2. أقسام النساء والرجال والأطفال (Women, Men, Kids & Catalog Filtering)</h3>
+      <p>
+        تتم إدارتها عبر صفحة موحدة ذكية <span class="path">src/pages/Listing.jsx</span> تتلقى الـ <span class="en">type</span> كـ Prop:
+      </p>
+      <ul style="padding-right: 20px; line-height: 1.8;">
+        <li><strong>الفلترة الذكية للكلمات (<span class="en">matchesSubcategory</span>):</strong> لا تعتمد فقط على تطابق نصي أعمى؛ بل تفحص اسم القطعة وتصنيفها ووصفها بروابط Regex متقدمة؛ فمثلاً عند اختيار <em>"Evening Dresses"</em> يتم استخراج الفساتين الحريرية وفساتين السهرة تلقائياً واستبعاد الملابس الكاجوال.</li>
+        <li><strong>التصنيف المزدوج وتعدد الأقسام:</strong> يدعم المتجر المسارات: <span class="path">/women</span>, <span class="path">/men</span>, <span class="path">/kids</span>, <span class="path">/category/:dept</span>, و <span class="path">/category/:dept/:sub</span> مما يمنح مرونة مطلقة في هيكلة الروابط وتوافقها مع محركات البحث (<span class="en">SEO-Friendly URLs</span>).</li>
+        <li><strong>تأثير الإضافة:</strong> إضافة أي قطعة في قسم "Kids" مثلاً من لوحة التحكم يجعلها تظهر تلقائياً في صفحة الأطفال وفلاترها دون كتابة سطر كود إضافي.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- ==================== SECTION 6: IMAGES & INDEXEDDB ==================== -->
+  <div id="sec6">
+    <h1>6. معمارية الصور، الـ 4 زوايا، ومحرك التخزين المحلي IndexedDB</h1>
+    <p>
+      أحد أذكى الجوانب المعمارية في VELORA هو طريقة التعامل مع صور المنتجات عبر ملفين رئيسيين: <span class="path">src/utils/productImages.js</span> و <span class="path">src/utils/indexedDB.js</span>.
+    </p>
+
+    <div class="grid-2 avoid-break">
+      <div class="card">
+        <h3>محرك الزوايا الفوتوغرافية الأربعة (<span class="path">productImages.js</span>)</h3>
+        <p>
+          يحدد المحرك 4 مفاتيح قياسية لكل قطعة:
+        </p>
+        <ul style="padding-right: 18px; font-size: 13px;">
+          <li><span class="en">front</span>: الواجهة الأمامية والقصة الكاملة.</li>
+          <li><span class="en">back</span>: تفصيل الظهر وقصة الأكتاف والخياطة.</li>
+          <li><span class="en">side</span>: المظهر الجانبي وانسيابية القوام.</li>
+          <li><span class="en">detail</span>: تفاصيل القماش الفاخر، البطانة، والأزرار.</li>
+        </ul>
+        <p style="margin-top: 10px;">
+          <strong>تخصيص المسميات حسب نوع القطعة (<span class="en">Archetypes</span>):</strong><br>
+          الدالة <span class="en">getViewMeta</span> تغير المسميات بذكاء؛ ففي <em>الشنط</em> تظهر المسميات كـ ("من بره"، "الجنب"، "الظهر"، "الشنطة من جوه والبطانة والجيوب")، وفي <em>الأحذية</em> ("الجنب الخارجي"، "الجنب الداخلي"، "فرشة الكوتشي والبطانة"، "الكعب والنعل")، وفي <em>البدل والفساتين</em> ("الوش"، "الضهر"، "الجنب"، "التفاصيل").
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>تخزين الصور في المتصفح عبر IndexedDB (<span class="path">indexedDB.js</span>)</h3>
+        <p>
+          من المعروف أن <span class="en">LocalStorage</span> محدود بـ <strong>5MB فقط</strong> لكل موقع؛ تخزين صور بدقة عالية بصيغة Base64 فيه سيؤدي سريعاً لامتلاء الذاكرة وانهيار التطبيق.
+        </p>
+        <p>
+          <strong>الحل الهندسي:</strong> تم بناء مستودع محلي داخل المتصفح عبر <span class="en">IndexedDB</span> باسم قاعدة بيانات <span class="en">velora-db</span> ومتجر كائنات <span class="en">velora-images</span>:
+        </p>
+        <ul style="padding-right: 18px; font-size: 13px;">
+          <li>تخزين الصور كـ <span class="en">Blobs</span> ثنائية بأحجام قد تصل إلى مئات الميجابايت دون أي قيود على LocalStorage.</li>
+          <li>استرجاع الصور عبر <span class="en">URL.createObjectURL(blob)</span> لتعمل كروابط صور طبيعية فائقة السرعة.</li>
+          <li>المفتاح المركب: <code class="en">`${productId}|${colorName}|${viewKey}`</code> يضمن دقة الربط بين الصورة واللون والزاوية.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- ==================== SECTION 7: INVENTORY & ORDERS ==================== -->
+  <div id="sec7">
+    <h1>7. محرك المخزون الفيزيائي المتعدد وإدارة الطلبات (Inventory & Orders Architecture)</h1>
+
+    <div class="card avoid-break">
+      <h3>معمارية المخزون ثلاثي الأبعاد (<span class="path">src/utils/inventory.js</span>)</h3>
+      <p>
+        في المتاجر البسيطة، يُوضع رقم واحد للمخزون (مثلاً: <span class="en">stock: 10</span>). لكن في VELORA، المخزون مبني وفق نموذج الأتيليه الحقيقي:
+      </p>
+      <pre>
+product = {
+  id: "women-1",
+  name: "Classic Blazer",
+  sizes: [
+    {
+      name: "Noir Black",
+      hex: "#1f1f1d",
+      sizes: [
+        { label: "XS", stock: 10 },
+        { label: "S",  stock: 8 },
+        { label: "M",  stock: 5 },
+        { label: "L",  stock: 0 } // نفد في هذا المقاس واللون فقط!
+      ]
+    },
+    {
+      name: "Camel Dune",
+      hex: "#b89569",
+      sizes: [
+        { label: "XS", stock: 4 },
+        { label: "S",  stock: 6 }
+      ]
+    }
+  ]
+};
+      </pre>
+      <p>
+        <strong>القواعد الحسابية الصارمة للمخزون:</strong>
+      </p>
+      <ul style="padding-right: 20px; line-height: 1.8;">
+        <li><strong>حساب الإجمالي (<span class="en">getProductTotalStock</span>):</strong> لا يقرأ رقماً عشوائياً، بل يجمع رياضياً كافة وحدات المتغيرات (<span class="en">variants</span>). إذا لم تكن القطعة تحتوي مصفوفة مقاسات، يُرجع <span class="en">null</span> وتُصنف كـ <em>"Stock Not Set"</em> وتُمنع الإضافة للسلة لحماية المتجر.</li>
+        <li><strong>فحص التوفر اللحظي (<span class="en">isVariantAvailable</span>):</strong> عند اختيار العميل للون "Noir Black" ومقاس "L"، يفحص الكود الكمية الخاصة بهذا المزيج فقط؛ إذا كانت صفر، يتعطل زر "Add to Bag" ويظهر تنبيه "Out of Stock in this selection".</li>
+        <li><strong>الخصم التلقائي عند الطلب (<span class="en">deductOrderStockFromCatalog</span>):</strong> بمجرد ضغط العميل على تأكيد الطلب في صفحة الـ Checkout، يتم استدعاء هذه الدالة وتمرير عناصر السلة لتقوم بإنقاص الكميات الفعلية من كتالوج المنتجات وحفظ الكتالوج المحدث فوراً.</li>
+      </ul>
+    </div>
+
+    <div class="card avoid-break">
+      <h3>دورة حياة الطلب والتتبع الفاخر (<span class="path">src/utils/orders.js</span>)</h3>
+      <p>
+        يمر كل طلب في VELORA عبر ست مراحل دقيقة ومحاكية لكبرى شركات الشحن:
+      </p>
+      <div class="grid-3" style="font-size: 12px; text-align: center;">
+        <div style="background:#f1f5f9; padding:8px; border-radius:4px;">1. Awaiting payment<br><small>(في انتظار التحويل)</small></div>
+        <div style="background:#e0f2fe; padding:8px; border-radius:4px;">2. Processing<br><small>(تجهيز وتغليف بالأوفيس)</small></div>
+        <div style="background:#fef3c7; padding:8px; border-radius:4px;">3. Confirmed<br><small>(تم تأكيد الحجز)</small></div>
+      </div>
+      <div class="grid-3" style="font-size: 12px; text-align: center; margin-top: 8px;">
+        <div style="background:#fed7aa; padding:8px; border-radius:4px;">4. Shipped<br><small>(خرج للشحن مع المندوب)</small></div>
+        <div style="background:#dcfce7; padding:8px; border-radius:4px;">5. Delivered<br><small>(تم التسليم بنجاح)</small></div>
+        <div style="background:#fee2e2; padding:8px; border-radius:4px;">6. Cancelled<br><small>(ملغي)</small></div>
+      </div>
+      <p style="margin-top: 12px;">
+        صفحة العميل (<span class="path">Account.jsx</span>) تحتوي على خط زمني تفاعلي (<span class="en">Interactive Stepper</span>) يعرض رقم البوليصة (<span class="en">Tracking Number</span>)، شركة الشحن المعتمدة (<span class="en">Aramex Premier</span> أو <span class="en">Bosta White Glove</span>)، وتاريخ التوصيل المتوقع.
+      </p>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- ==================== SECTION 8: PAYMENTS & EGYPTIAN INTEGRATIONS ==================== -->
+  <div id="sec8">
+    <h1>8. معمارية المدفوعات والتكاملات المحلية المصرية (Payment & Commerce Architecture)</h1>
+    <p>
+      في السوق المصري، يختلف سلوك المستهلك تماماً عن الأسواق الغربية؛ ولهذا تم تأسيس ملف <span class="path">src/services/payments.js</span> و <span class="path">src/utils/shipping.js</span> ليدعم:
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>طريقة الدفع</th>
+          <th>المعرف التقني</th>
+          <th>طريقة العمل والتجربة للمستخدم</th>
+          <th>المتغير البيئي (.env)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>الدفع عند الاستلام مع المعاينة المجانية</strong></td>
+          <td><code class="en">cod</code></td>
+          <td>الميزة التنافسية الأقوى؛ العميل يعاين الملابس والخامة ويقيس قبل دفع مليم للمندوب. يخرج الطلب بحالة Processing مباشرة.</td>
+          <td>مفعل افتراضياً بدون متغير</td>
+        </tr>
+        <tr>
+          <td><strong>شبكة المدفوعات اللحظية انستاباي InstaPay</strong></td>
+          <td><code class="en">instapay</code></td>
+          <td>تحويل فوري بدون رسوم؛ تظهر شاشة تأكيد الطلب مع كود الـ IPA ورقم الطلب لوضعه في خانة الملاحظات داخل تطبيق InstaPay.</td>
+          <td><code class="en">VITE_INSTAPAY_IPA</code><br>(e.g. velora@instapay)</td>
+        </tr>
+        <tr>
+          <td><strong>فودافون كاش والمحافظ الإلكترونية</strong></td>
+          <td><code class="en">vodafone</code></td>
+          <td>تحويل من أي محفظة إلكترونية (Vodafone, Orange, Etisalat, WE) إلى رقم المحفظة المعتمد مع تعليمات تأكيد الإيداع.</td>
+          <td><code class="en">VITE_TRANSFER_NUMBER</code><br>(e.g. 01012345678)</td>
+        </tr>
+        <tr>
+          <td><strong>كروت ميزة / فيزا / ماستركارد</strong></td>
+          <td><code class="en">card</code></td>
+          <td>محاكاة الدفع المشفر عبر بوابات الدفع البنكية (مثل Paymob أو Fawry أو Stripe) مع تشفير ثلاثي الأبعاد 3D Secure 2.0.</td>
+          <td>جاهز لربط API Keys للـ Gateway</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="box-callout box-success avoid-break">
+      <strong>حسابات الشحن الجغرافي المصري (<span class="path">src/utils/shipping.js</span>):</strong><br>
+      يقسم المشروع مصر إلى مناطق جغرافية دقيقة (<span class="en">ZONES</span>):
+      <br>1. القاهرة والجيزة (شحن سريع 1-2 يوم عمل).
+      <br>2. الإسكندرية والساحل ومحافظات الدلتا والقناة (2-3 أيام).
+      <br>3. محافظات الصعيد والبحر الأحمر وجنوب سيناء (3-5 أيام).
+      <br>يتم احتساب الشحن <strong>مجاناً بالكامل</strong> عند تجاوز إجمالي السلة قيمة <strong>2,500 جنيه مصري</strong> (أو 150 دولار)، وتوجد مسطرة تفاعلية في السلة تحسب للعميل بدقة: <em>"أضيفي 450 ج.م للحصول على شحن مجاني"</em>.
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- ==================== SECTION 9: INTERVIEW PREP ==================== -->
+  <div id="sec9">
+    <h1>9. أسئلة المقابلات الهندسية وأجوبتها التقنية النموذجية (Technical Interview Prep)</h1>
+    <p>
+      هذا القسم مخصص لإعدادك بالكامل لمناقشة الكود مع كبار مهندسي البرمجيات (<span class="en">Senior / Lead Software Engineers</span>). الإجابات مبنية بدقة على ما هو موجود بالفعل في كود VELORA.
+    </p>
+
+    <!-- Q1 -->
+    <div class="qa-card avoid-break">
+      <div class="qa-q">ما هو React ولماذا تم استخدامه في مشروع VELORA بدلاً من JavaScript العادية؟</div>
+      <div class="qa-a">
+        React هي مكتبة واجهات مستخدم (<span class="en">UI Library</span>) تعتمد على المكونات المعزولة (<span class="en">Component-Based Architecture</span>) والـ <span class="en">Virtual DOM</span>. تم استخدامها في VELORA لأن المتجر يتطلب تحديثات لحظية مكثفة (مثل إضافة عنصر للسلة، تحديث عداد الهيدر، تغيير صورة العرض عند اختيار لون، والفلترة الفورية)؛ محاولة بناء ذلك بـ Vanilla JS كانت ستتطلب تلاعباً معقداً ومباشراً بالـ DOM الحقيقي مما يسبب بطء في الأداء وصعوبة بالغة في صيانة الكود.
+      </div>
+      <div class="qa-velora">
+        <strong>في VELORA:</strong> انظر إلى <span class="path">src/context/StoreContext.jsx</span>؛ بمجرد استدعاء <span class="en">add(product)</span>، تقوم React بإعادة تصيير (<span class="en">Re-render</span>) للمكونات المشتركة فقط (أيقونة السلة في الهيدر، والتنبيه في Toast) دون الحاجة لإعادة تحميل الصفحة بالكامل.
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="qa-card avoid-break">
+      <div class="qa-q">ما هو الفرق بين Props و State؟ وأين تم استخدام كل منهما في المشروع؟</div>
+      <div class="qa-a">
+        <strong>الـ State:</strong> هي البيانات الداخلية التي يتحكم فيها المكون نفسه ويمتلكها، وتتغير مع الوقت مع تفاعل المستخدم (مثل: المقاس المحدد <span class="en">selectedSize</span>، فتح وإغلاق القائمة <span class="en">isOpen</span>). عند تغير الـ State، يُعاد تصيير المكون.<br>
+        <strong>الـ Props:</strong> هي خصائص ومعاملات تُمرر من المكون الأب (<span class="en">Parent</span>) إلى المكون الابن (<span class="en">Child</span>) للقراءة فقط (<span class="en">Read-Only / Immutable</span>).
+      </div>
+      <div class="qa-velora">
+        <strong>في VELORA:</strong> في مكون <span class="path">src/components/ProductCard.jsx</span>، يستقبل المكون بيانات القطعة <span class="en">p</span> كـ <strong>Prop</strong> من الصفحة الأم (<span class="path">Listing.jsx</span>)، بينما يمتلك داخلياً <strong>State</strong> خاصة به مثل <span class="en">selectedColor</span> لتحديد أي لون معروض حالياً على الكارت.
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="qa-card avoid-break">
+      <div class="qa-q">كيف تعمل خطافات (Hooks) مثل useState و useEffect في مشروعك؟</div>
+      <div class="qa-a">
+        <strong>useState:</strong> يسمح للمكونات الوظيفية بالاحتفاظ بحالة محلية ومزامنتها مع واجهة المستخدم.<br>
+        <strong>useEffect:</strong> يُستخدم للتعامل مع الآثار الجانبية (<span class="en">Side Effects</span>) مثل جلب البيانات من السحابة، التعامل مع التخزين المحلي، أو الاستماع لأحداث المتصفح.
+      </div>
+      <div class="qa-velora">
+        <strong>في VELORA:</strong> انظر إلى <span class="path">src/App.jsx</span> سطر 25:
+        <br><code class="en">useEffect(() =&gt; { window.scrollTo(0, 0); }, [location.pathname]);</code><br>
+        هنا يقوم الـ Hook بإرجاع شريط التمرير إلى أعلى الصفحة كلما تغير مسار الرابط (<span class="en">pathname</span>)، وفي <span class="path">StoreContext.jsx</span> يقوم بحفظ عناصر السلة في LocalStorage تلقائياً في كل مرة يتغير فيها مصفوفة الـ <span class="en">cart</span>.
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="qa-card avoid-break">
+      <div class="qa-q">لماذا فضلتم Context API على مكتبات مثل Redux أو Zustand في هذا المتجر؟</div>
+      <div class="qa-a">
+        لأن حجم المتجر ومتطلبات تدفق البيانات تناسب تماماً <span class="en">Context API</span>؛ استخدام Redux كان سيضيف كوداً ثقيلاً غير مبرر (<span class="en">Boilerplate: actions, reducers, dispatchers</span>) وحجم حزمة أكبر. تم بناء <span class="en">StoreContext</span> و <span class="en">AuthContext</span> بشكل معياري مع فصل الاهتمامات (<span class="en">Separation of Concerns</span>) واستخدام <span class="en">useCallback</span> و <span class="en">useMemo</span> لتفادي عمليات إعادة التصيير غير الضرورية.
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="qa-card avoid-break">
+      <div class="qa-q">كيف يتم رفع وإدارة صور المنتجات داخل VELORA بدون وجود Backend مخصص؟</div>
+      <div class="qa-a">
+        يعتمد المشروع على استراتيجيتين هندسيتين:
+        <br>1. <strong>FileReader API:</strong> داخل <span class="path">ProductModal.jsx</span> يتم قراءة الملف المرفوع وتحويله إلى <span class="en">Base64 DataURL</span> للمعاينة اللحظية.
+        <br>2. <strong>IndexedDB Engine:</strong> في <span class="path">src/utils/indexedDB.js</span> يتم تخزين الصورة كملف ثنائي (<span class="en">Blob</span>) داخل متصفح المستخدم تحت قاعدة بيانات <span class="en">velora-db</span>، مما يمنع تجاوز سعة LocalStorage، مع توفير روابط فورية عبر <span class="en">URL.createObjectURL</span>. وفي حال توفر خادم سحابي مستقبلاً، يتم استبدال هذا برفع الصور إلى Firebase Storage أو Cloudinary.
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="qa-card avoid-break">
+      <div class="qa-q">ماذا يحدث في النظام عند قيام عميل بطلب قطعة، وما هي آلية خصم المخزون؟</div>
+      <div class="qa-a">
+        عند الضغط على تأكيد الطلب في <span class="path">Checkout.jsx</span>، تحدث العمليات التالية بشكل متسلسل:
+        <br>1. التحقق من صحة البيانات (العنوان، الهاتف، المنطقة).
+        <br>2. استدعاء <span class="en">addNewOrder(uid, orderData)</span> لتوليد معرف طلب فريد (مثل <span class="en">VEL-8921A</span>) وحفظه في Firestore أو LocalStorage.
+        <br>3. استدعاء <span class="en">deductOrderStock(orderData.items)</span> التي تمر على مصفوفة المنتجات وتبحث عن القطعة واللون والمقاس وتخصم الكمية المطلوبة بدقة من المخزون الفيزيائي.
+        <br>4. تفريغ السلة عبر <span class="en">clearCart()</span> وإظهار شاشة التأكيد مع بيانات الدفع.
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="qa-card avoid-break">
+      <div class="qa-q">كيف يمكن تحسين هذا المشروع وتجهيزه ليتحمل ملايين الزيارات (Future Improvements & Scalability)؟</div>
+      <div class="qa-a">
+        1. <strong>التحول إلى Server-Side Rendering (Next.js / Remix):</strong> لتحسين ظهور صفحات المنتجات في محركات البحث (<span class="en">SEO</span>) وتوليد صفحات ثابتة للكتالوج (<span class="en">ISR</span>).
+        <br>2. <strong>إدخال خادم خلفي مستقل (Node.js/NestJS أو Go):</strong> لمعالجة المدفوعات والـ Webhooks الخاصة بشركات الدفع والشحن بأمان بعيداً عن المتصفح.
+        <br>3. <strong>شبكة توصيل المحتوى والتحسين التلقائي للصور (Cloudinary / ImageKit / CDN):</strong> لتحويل صور الفاشون الضخمة تلقائياً إلى صيغتي <span class="en">WebP</span> و <span class="en">AVIF</span> وتصغير أحجامها بنسبة 70%.
+        <br>4. <strong>قاعدة بيانات حقيقية مجمعة (PostgreSQL / Redis):</strong> لإدارة المخزون ومنع الشراء المتزامن لنفس القطعة (<span class="en">Race Conditions & Concurrency Locks</span>).
+      </div>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- ==================== SECTION 10: LINE-BY-LINE CODE ANALYSIS ==================== -->
+  <div id="sec10">
+    <h1>10. شرح أكواد حقيقية من المشروع سطراً بسطر وتجربة التعديلات (Code Analysis)</h1>
+    <p>
+      في المقابلات الهندسية، سيطلب منك المهندس فتح ملف ومناقشة تفاصيل دقيقة فيه. إليك 3 نماذج من أهم أجزاء الكود في VELORA:
+    </p>
+
+    <!-- Code Sample 1 -->
+    <div class="card avoid-break">
+      <h3>النموذج الأول: منطق الإضافة للسلة وفحص المخزون (<span class="path">src/context/StoreContext.jsx</span>)</h3>
+      <pre>
+106: const add = (product, size = '', color = '', customImage = null) => {
+107:   // 1. التحقق من ضبط هيكل المخزون للقطعة
+108:   const totalStock = getProductTotalStock(product);
+109:   if (totalStock === null) {
+110:     setToast(`Apologies, ${product.name} is currently unavailable (stock not set).`);
+111:     return false;
+112:   }
+113: 
+114:   // 2. التحقق من توفر المقاس واللون المحددين تحديداً
+115:   const available = isVariantAvailable(product, color, size);
+116:   if (!available) {
+117:     setToast(`Apologies, ${product.name} is out of stock in this selection.`);
+118:     return false;
+119:   }
+120: 
+121:   // 3. إنشاء المفتاح الفريد لسطر السلة
+122:   const key = lineKey(product.id, size, color);
+123:   const itemImage = customImage || product.image;
+124:   setCart(current =>
+125:     current.some(i => i.key === key)
+126:       ? current.map(i => (i.key === key ? { ...i, qty: i.qty + 1 } : i))
+127:       : [...current, { ...product, image: itemImage, size, color, key, qty: 1 }]
+128:   );
+129:   setToast(`${product.name} added to your bag`);
+130:   return true;
+131: };
+      </pre>
+
+      <div class="box-callout box-info" style="font-size: 13px;">
+        <strong>شرح الكود سطراً بسطر بالعربية المبسطة:</strong>
+        <br>• <strong>السطر 106:</strong> تعريف دالة الإضافة <span class="en">add</span>؛ تستقبل القطعة والمقاس واللون وصورة مخصصة، وتضع قيماً افتراضية فارغة للمقاس واللون.
+        <br>• <strong>السطور 108-112:</strong> فحص أمان أولي؛ استدعاء <span class="en">getProductTotalStock</span> للتأكد من أن المشرف قام بضبط مخزون القطعة. لو كانت النتيجة <span class="en">null</span> (أي لم يتم تكوينها)، يُظهر إشعاراً يعتذر للمستخدم وتتوقف الدالة بإرجاع <span class="en">false</span>.
+        <br>• <strong>السطور 115-119:</strong> فحص المقاس واللون المحددين تحديداً؛ إذا كانت القطعة متوفرة في مقاس S لكن نفدت في مقاس M، تمنع الدالة استكمال الإضافة لمقاس M.
+        <br>• <strong>السطور 121-123:</strong> توليد المفتاح الفريد <span class="en">lineKey</span> عبر دمج (معرف المنتج + المقاس + اللون). وتحديد الصورة (سواء صورة اللون المختار أو الصورة الرئيسية).
+        <br>• <strong>السطور 124-128:</strong> استخدام الـ Functional State Update <span class="en">setCart(current =&gt; ...)</span>؛ يفحص هل هذا المفتاح موجود بالفعل بالسلة؟ إذا كان موجوداً يزيد الكمية <span class="en">qty + 1</span> فقط، وإذا كان جديداً يضيفه كعنصر جديد في المصفوفة.
+      </div>
+
+      <div class="grid-2" style="font-size: 12.5px; margin-top: 10px;">
+        <div style="background:#fee2e2; padding:10px; border-radius:4px;">
+          <strong>ماذا يحدث لو حذفنا السطر 122؟</strong><br>
+          ستفشل عملية التمييز بين المقاسات المختلفة لنفس المنتج؛ إذا اشترى العميل قميصاً مقاس S ثم أضاف نفس القميص مقاس L، سيتم استبدال المقاس أو جمع الكمية خطأ دون تمييز المقاسين في الفاتورة!
+        </div>
+        <div style="background:#f0fdf4; padding:10px; border-radius:4px;">
+          <strong>تعديل مقترح صحيح (Feature Addition):</strong><br>
+          إضافة شرط للتحقق من عدم تجاوز الكمية في السلة للكمية المتبقية في المخزون:<br>
+          <code class="en">if (existingItem && existingItem.qty &gt;= variantStock) { setToast('Max limit reached'); return false; }</code>
+        </div>
+      </div>
+    </div>
+
+    <!-- Code Sample 2 -->
+    <div class="card avoid-break">
+      <h3>النموذج الثاني: عدسة التكبير بالماوس لمعاينة خامات القماش (<span class="path">src/components/ProductGallery.jsx</span>)</h3>
+      <pre>
+69: const handleMouseMove = (e) => {
+70:   if (!mainImageRef.current) return;
+71:   const rect = mainImageRef.current.getBoundingClientRect();
+72:   const x = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+73:   const y = Math.max(0, Math.min(100, ((e.clientY - rect.top) / rect.height) * 100));
+74:   setZoomOrigin({ x, y });
+75: };
+      </pre>
+
+      <div class="box-callout box-info" style="font-size: 13px;">
+        <strong>شرح الكود بالعربية:</strong>
+        <br>• <strong>السطر 71:</strong> استخراج أبعاد وموقع صورة المنتج بدقة من الشاشة عبر <span class="en">getBoundingClientRect()</span>.
+        <br>• <strong>السطور 72-73:</strong> حساب النسبة المئوية الدقيقة لمكان مؤشر الماوس بالنسبة للصورة؛ فإذا كان الماوس في المنتصف تماماً تكون النتيجة <span class="en">{ x: 50, y: 50 }</span>، مع حماية عبر <span class="en">Math.max(0, Math.min(100, ...))</span> لمنع خروج القيم عن نطاق 0% إلى 100%.
+        <br>• <strong>السطر 74:</strong> حفظ النقطة في الـ State ليتم تطبيقها في الـ CSS كـ <span class="en">transform-origin: `${zoomOrigin.x}% ${zoomOrigin.y}%`</span> مما يجعل التكبير يحدث بالضبط عند النقطة التي يشير إليها المستخدم.
+      </div>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- ==================== SECTION 11: TROUBLESHOOTING ==================== -->
+  <div id="sec11">
+    <h1>11. استكشاف الأخطاء وحلها وأهم الإرشادات الهندسية (Troubleshooting & Engineering Practices)</h1>
+    <p>
+      أهم المشاكل الشائعة التي قد تواجه أي مطور يعمل على مشروع VELORA وكيفية تشخيصها وحلها:
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>المشكلة / الخطأ (Error / Bug)</th>
+          <th>السبب الجذري في الكود (Root Cause)</th>
+          <th>طريقة الحل الهندسي (Resolution)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>اختفاء المنتجات أو ظهور كتالوج فارغ</strong></td>
+          <td>حدوث عطب في بيانات <span class="en">velora-products-v2</span> داخل LocalStorage بسبب كتابة بيانات غير صحيحة يدوياً.</td>
+          <td>الدخول إلى لوحة الإدارة والضغط على زر <em>"Reset Catalog to Seed"</em> أو مسح مفتاح التخزين عبر الكونسول: <code class="en">localStorage.removeItem('velora-products-v2')</code> ليعود الكتالوج الافتراضي المكون من 76 قطعة.</td>
+        </tr>
+        <tr>
+          <td><strong>خطأ Firebase Auth "configuration-not-found"</strong></td>
+          <td>تشغيل التطبيق بدون إدخال مفاتيح Firebase في ملف <span class="path">.env</span> ومحاولة تسجيل الدخول.</td>
+          <td>المشروع مصمم ليتعامل مع هذا الموقف بذكاء؛ اضغط على <em>"Enter Demo Session"</em> لتجربة لوحة العميل وحفظ الطلبات، أو انسخ ملف <span class="path">env.example</span> إلى <span class="path">.env</span> وضع مفاتيح مشروعك.</td>
+        </tr>
+        <tr>
+          <td><strong>تكرار الحلقات اللانهائية (Infinite Loops) في useEffect</strong></td>
+          <td>وضع كائن أو مصفوفة تتغير في كل render داخل مصفوفة التبعيات (<span class="en">dependency array</span>) بدون استخدام <span class="en">useCallback</span> أو <span class="en">useMemo</span>.</td>
+          <td>انظر إلى <span class="path">StoreContext.jsx</span> سطر 57؛ تم تغليف دالة <span class="en">reloadOrders</span> بـ <span class="en">useCallback</span> لمنع إنشاء مرجع جديد للدالة في كل تصيير.</td>
+        </tr>
+        <tr>
+          <td><strong>امتلاء ذاكرة LocalStorage (QuotaExceededError)</strong></td>
+          <td>محاولة رفع صور عالية الدقة من الجهاز كـ Base64 Strings داخل المنتجات.</td>
+          <td>استخدام مستودع <span class="path">src/utils/indexedDB.js</span> المصمم خصيصاً في VELORA للتعامل مع الـ Blobs بدون استهلاك مساحة LocalStorage، أو استخدام روابط صور خارجية (Unsplash / Cloudinary).</td>
+        </tr>
+        <tr>
+          <td><strong>عدم استجابة الميجا منيو في الشاشات الصغيرة (Mobile Responsiveness)</strong></td>
+          <td>تداخل خواص الـ hover في الشاشات اللمسية التي لا تمتلك مؤشر ماوس.</td>
+          <td>تم حل هذه المشكلة بالكامل في <span class="path">src/header-responsive.css</span>؛ حيث يتحول الهيدر في الشاشات الأقل من 900px إلى قائمة منزلقة جانبية (<span class="en">Slide-out Drawer</span>) تعمل بالنقر بدلاً من التحويم.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="box-callout box-gold avoid-break" style="margin-top: 25px;">
+      <strong>خلاصة مهندس البرمجيات (Engineering Summary):</strong><br>
+      مشروع <strong>VELORA</strong> يمثل نموذجاً متقدماً لتطبيق الـ Front-End التجاري المتكامل؛ فهو يجمع بين الأناقة البصرية للعلامات الفاخرة، والهندسة البرمجية الصارمة التي تراعي إدارة الذاكرة، فحص المخزون متعدد الأبعاد، استقرار الحالة العامة، والاستقلالية عن الخوادم مع جاهزية الربط السحابي. هذا الدليل يمنحك الثقة الكاملة لشرح ومناقشة كل سطر في المشروع في أي مقابلة تقنية بنجاح باهر.
+    </div>
+  </div>
+
+</body>
+</html>

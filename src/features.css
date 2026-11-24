@@ -1,0 +1,61 @@
+/* Sizing, delivery progress, wishlist — uses the existing VELORA tokens */
+.size-block{margin:28px 0 6px}
+.size-head{display:flex;justify-content:space-between;font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.size-head em{font-style:normal;color:#a34f4f}
+.size-grid{display:flex;flex-wrap:wrap;gap:8px}
+.size-chip{min-width:48px;height:44px;padding:0 12px;border:1px solid var(--line);background:transparent;color:var(--text);font-size:12px;letter-spacing:.5px;transition:.2s}
+.size-chip:hover{border-color:var(--text)}
+.size-chip.on{background:var(--dark);color:var(--bg);border-color:var(--dark)}
+.fit-finder{margin-top:14px;border-bottom:1px solid var(--line);padding-bottom:12px}
+.fit-finder summary{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--accent)}
+.fit-finder form{padding-top:16px;display:grid;gap:14px}
+.fit-finder label{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);display:block}
+.fit-finder input{display:block;width:100%;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--text);padding:10px 0;outline:0;font-size:13px}
+.fit-finder input:focus{border-color:var(--accent)}
+.fit-row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.seg{display:flex;border:1px solid var(--line)}
+.seg button{flex:1;border:0;background:transparent;color:var(--muted);padding:10px 4px;font-size:10px;letter-spacing:1px;text-transform:uppercase}
+.seg button.on{background:var(--soft);color:var(--text)}
+.fit-result{font-size:13px;line-height:1.7;margin:0;display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px}
+.fit-result b{font:22px 'Playfair Display',serif}
+.fit-note{font-size:10px;color:var(--muted);margin:0}
+.ship-hint{display:flex;align-items:center;gap:7px;justify-content:center;font-size:11px;color:var(--muted);margin:14px 0 0}
+.ship-progress p{font-size:12px;margin:0 0 10px;color:var(--text)}
+.bar{height:3px;background:var(--line)}
+.bar i{display:block;height:100%;background:var(--accent);transition:width .35s}
+.order-summary>.ship-progress{display:block;margin:0 0 22px}
+.zone-select{display:flex!important;flex-direction:column;align-items:flex-start;gap:8px;font-size:10px;letter-spacing:1px;text-transform:uppercase}
+.zone-select select{width:100%;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--text);padding:9px 0;font-size:12px;outline:0}
+.header-actions .count{pointer-events:none}
+.cur-btn{font-size:10px;letter-spacing:1px;font-weight:700;min-width:38px}
+.crumbs{max-width:1200px;margin:30px auto -30px;padding:0 5%;display:flex;gap:10px;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.crumbs b{font-weight:500;color:var(--text)}
+.crumbs a:hover{color:var(--accent)}
+.related{padding-top:20px}
+.order-summary .form-success{margin:15px 0 0;font-size:11px}
+@media(max-width:560px){.crumbs{margin:20px auto -10px}}
+.form-error{color:#a34f4f!important;font-size:12px;margin:15px 0 0}
+.google-btn{margin-top:10px}
+.auth-links{display:flex;justify-content:space-between;margin-top:18px}
+.dot{position:absolute;top:5px;right:4px;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.order-line b{text-align:right}
+.checkout-page{max-width:1100px;margin:70px auto 110px;padding:0 5%}
+.checkout-layout{display:grid;grid-template-columns:1.4fr 1fr;gap:6%;align-items:start}
+.plain-select{display:block;width:100%;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--text);padding:12px 0;outline:0;font-size:12px;margin-top:4px}
+.pay-title{margin-top:35px!important}
+.pay-option{display:flex!important;align-items:flex-start;gap:14px;border:1px solid var(--line);padding:16px;cursor:pointer;text-transform:none!important;letter-spacing:0!important}
+.pay-option.on{border-color:var(--accent);background:var(--soft)}
+.pay-option input{width:auto!important;margin-top:3px}
+.pay-option b{display:block;font-size:13px;color:var(--text);font-weight:600}
+.pay-option small{display:block;font-size:11px;color:var(--muted);margin-top:4px;line-height:1.6}
+@media(max-width:820px){.checkout-layout{grid-template-columns:1fr;gap:30px}}
+.admin-page{max-width:900px;margin:70px auto 110px;padding:0 5%}
+.admin-page h1{font:44px 'Playfair Display',serif;margin:8px 0 34px}
+.admin-order{border:1px solid var(--line);padding:22px;margin-bottom:18px;background:var(--bg)}
+.admin-order header,.admin-order footer{display:flex;justify-content:space-between;align-items:center;gap:14px}
+.admin-order header small{display:block;color:var(--muted);font-size:11px;margin-top:4px}
+.admin-order select{border:1px solid var(--line);background:transparent;color:var(--text);padding:9px 10px;font-size:12px}
+.admin-customer{font-size:13px;line-height:1.8;margin:16px 0}
+.admin-order ul{margin:0 0 16px;padding-left:18px;font-size:13px;line-height:1.8}
+.admin-order footer{border-top:1px solid var(--line);padding-top:14px;font-size:12px;color:var(--muted)}
+.admin-order footer b{color:var(--text);font-size:14px}
